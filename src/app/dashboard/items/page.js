@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import StarRating from '@/app/components/StarRating';
 import { Search, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ItemsPage() {
   const { user } = useStore();
@@ -11,7 +12,7 @@ export default function ItemsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getItems = async () => {
+  const getItems = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -31,11 +32,11 @@ export default function ItemsPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [user?.username]);
 
   useEffect(() => {
     getItems();
-  }, [])
+  }, [getItems])
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -105,10 +106,12 @@ export default function ItemsPage() {
                         <div className="flex items-start space-x-4">
                           {item.previews?.live_site && (
                             <div className="flex-shrink-0">
-                              <img
+                              <Image
                                 src={item.previews.icon_with_landscape_preview.icon_url}
                                 alt={item.name}
-                                className="h-12 w-12 rounded-lg object-cover border border-gray-200 dark:border-gray-600 shadow-sm"
+                                width={48}
+                                height={48}
+                                className="rounded-lg object-cover border border-gray-200 dark:border-gray-600 shadow-sm"
                                 loading="lazy"
                               />
                             </div>

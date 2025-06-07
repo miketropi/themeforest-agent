@@ -18,7 +18,7 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {
-              mounted && <>Welcome back, {user?.username || 'User'}! Here's what's happening with your account today.</>
+              mounted && <>Welcome back, {user?.username || 'User'}! Here&apos;s what&apos;s happening with your account today.</>
             }
           </p>
         </div>

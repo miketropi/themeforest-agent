@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import Pagination from '../../components/Pagination';
 import { ArrowDownToLine, Search, X } from 'lucide-react';
@@ -20,7 +20,7 @@ export default function StatementsPage() {
   });
   const { user } = useStore();
 
-  const getStatements = async (page = 1, dateFilters = null) => {
+  const getStatements = useCallback(async (page = 1, dateFilters = null) => {
     setIsLoading(true);
     setError(null);
 
@@ -62,7 +62,7 @@ export default function StatementsPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [filters]);
 
   const handleFilterChange = (field, value) => {
     setFilters(prev => ({
@@ -88,11 +88,11 @@ export default function StatementsPage() {
 
   useEffect(() => {
     getStatements();
-  }, [])
+  }, [getStatements])
 
   useEffect(() => {
     getStatements(currentPage);
-  }, [currentPage]);
+  }, [currentPage, getStatements]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
