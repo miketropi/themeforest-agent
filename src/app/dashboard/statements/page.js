@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import Pagination from '../../components/Pagination';
 import { ArrowDownToLine, Search, X } from 'lucide-react';
+import { fetchWithAuth } from '../../utils/fetchWithAuth';
 
 export default function StatementsPage() {
   const [statements, setStatements] = useState([]);
@@ -20,9 +21,11 @@ export default function StatementsPage() {
   });
   const { user } = useStore();
 
-  const getStatements = useCallback(async (page = 1, dateFilters = null) => {
+  const getStatements = useCallback(async (dateFilters = null) => {
     setIsLoading(true);
     setError(null);
+
+    const page = currentPage;
 
     try {
       // Build query parameters
@@ -35,12 +38,10 @@ export default function StatementsPage() {
       if (filtersToUse.to_date) params.append('to_date', filtersToUse.to_date);
 
       const queryString = params.toString();
-      const url = `${process.env.NEXT_PUBLIC_TF_APP_REDIRECT_URI}/api/v1/statements${queryString ? `?${queryString}` : ''}`;
+      const url = `/api/v1/statements${queryString ? `?${queryString}` : ''}`;
 
-      const response = await fetch(url, {
-        method: 'GET',
-      }).then((res) => res.json());
-
+      const response = await fetchWithAuth(url).then(res => res.json());
+      console.log('fetchWithAuth', response);
       if (response.results) {
         setStatements(response.results);
 
@@ -62,7 +63,7 @@ export default function StatementsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [filters]);
+  }, [filters, currentPage]);
 
   const handleFilterChange = (field, value) => {
     setFilters(prev => ({
@@ -90,9 +91,6 @@ export default function StatementsPage() {
     getStatements();
   }, [getStatements])
 
-  useEffect(() => {
-    getStatements(currentPage);
-  }, [currentPage, getStatements]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

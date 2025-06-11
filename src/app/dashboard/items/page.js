@@ -5,6 +5,7 @@ import useStore from '../../store/useStore';
 import StarRating from '@/app/components/StarRating';
 import { Search, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
+import { fetchWithAuth } from '../../utils/fetchWithAuth';
 
 export default function ItemsPage() {
   const { user } = useStore();
@@ -17,13 +18,14 @@ export default function ItemsPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_TF_APP_REDIRECT_URI}/api/v1/items`, {
-        method: 'GET',
+      const response = await fetchWithAuth('/api/v1/items', {
         headers: {
           'username': user?.username
         },
-      }).then((res) => res.json());
+      }).then(res => res.json());
 
+      console.log('fetchWithAuth items', response);
+      
       if(response.matches){
         setItems(response.matches);
       }
@@ -36,7 +38,7 @@ export default function ItemsPage() {
 
   useEffect(() => {
     getItems();
-  }, [getItems])
+  }, [])
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

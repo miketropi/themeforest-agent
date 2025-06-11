@@ -25,16 +25,16 @@ export default async function Home({ searchParams }) {
           <p className="text-gray-600 dark:text-gray-400">Connect with your Envato account to continue</p>
         </div>
         
-        <div className="w-full p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div className="w-full p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
           <div className="flex flex-col items-center">
-            <Image
+            {/* <Image
               className="mb-6"
               src="/next.svg"
               alt="ThemeForest Agent"
               width={120}
               height={30}
               priority
-            />
+            /> */}
             
             <a
               className="w-full rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-[#81b441] text-white gap-2 hover:bg-[#72a139] font-medium text-sm sm:text-base h-12 px-5"
